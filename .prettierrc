@@ -1,5 +1,6 @@
 {
   "singleQuote": true,
+  "arrowParens": "avoid",
   "printWidth": 80,
   "prettier/prettier": [
     "error",
