@@ -10,6 +10,7 @@ const AppError = require('./utils/app-error');
 const globalErrorHandler = require('./controllers/errorController');
 
 const tourRouter = require('./routes/tourRoutes');
+const reviewRouter = require('./routes/reviewRoutes');
 const usersRouter = require('./routes/userRoutes');
 
 const app = express();
@@ -23,7 +24,7 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-//Limit requests from same API
+//Limit requests from same IP
 const limiter = rateLimit({
   max: 100,
   windowMs: 60 * 60 * 1000,
@@ -65,6 +66,7 @@ app.use((req, res, next) => {
 
 // 2) Routes
 app.use('/api/v1/tours', tourRouter);
+app.use('/api/v1/reviews', reviewRouter);
 app.use('/api/v1/users', usersRouter);
 
 app.all('*', (req, res, next) => {
@@ -73,6 +75,7 @@ app.all('*', (req, res, next) => {
   );
 });
 
+// 3) Global error handler
 app.use(globalErrorHandler);
 
 module.exports = app;
