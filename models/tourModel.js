@@ -116,6 +116,13 @@ const tourSchema = new mongoose.Schema(
 tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;
 });
+
+// Virtual populate
+tourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour',
+  localField: '_id',
+});
 //Document MIDDLEWARE : Runs before .save() and .create() and it will not trigger to .insertMany()
 tourSchema.pre('save', function (next) {
   this.slug = slugify(this.name, { lower: true });
@@ -147,6 +154,7 @@ tourSchema.pre(/^find/, function (next) {
 //   this.find({ secretTour: { $ne: true } });
 //   next();
 // });
+
 tourSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'guides',
@@ -154,6 +162,7 @@ tourSchema.pre(/^find/, function (next) {
   });
   next();
 });
+
 tourSchema.post(/^find/, function (document, next) {
   // eslint-disable-next-line no-console
   console.log(`Query took ${Date.now() - this.start}ms`);
