@@ -22,7 +22,7 @@ exports.getOne = (Model, populateOptions) =>
 
 exports.getAll = Model =>
   catchAsyncError(async (req, res, next) => {
-    //To Allow for nested GET reviews on tour
+    //To Allow for nested GET reviews on tour (hack)
     let filter = {};
     if (req.params.tourId) filter = { tour: req.params.tourId };
 
@@ -32,6 +32,7 @@ exports.getAll = Model =>
       .sort()
       .limitFields()
       .paginate();
+    // const documents = await features.query.explain();
     const documents = await features.query;
 
     //Send Response
